@@ -5,7 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/Christoffer stuff/Test.unity
+    guid: 6ed42aa72ec3f9d4fbf2d1d0a535ee66
+  - enabled: 1
+    path: Assets/Scenes/Christoffer stuff/Christoffer Scene.unity
+    guid: ca8242b007162a54a87bc45706e88253
   m_configObjects: {}
