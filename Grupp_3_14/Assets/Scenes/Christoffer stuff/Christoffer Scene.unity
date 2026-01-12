@@ -253,6 +253,10 @@ MonoBehaviour:
   - {fileID: 2061393559}
   - {fileID: 1712140112}
   - {fileID: 947714235}
+  win: 0
+  sceneToLoad: ErmiasScene
+  fadeTime: 2
+  fadeAnim: {fileID: 17687511}
   totalPipes: 0
   correcteedPipes: 0
 --- !u!4 &276879700
