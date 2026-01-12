@@ -1,15 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
 
     public GameObject PipeHolder;
     public GameObject[] Pipes;
+    public bool win = false;
+    
+    //Scene och fade variabler
+    public string sceneToLoad;
+    public float fadeTime = 0.5f;
+    public Animator fadeAnim;
 
     [SerializeField]
     int totalPipes = 0;
+    [SerializeField]
+    int correcteedPipes = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -27,9 +36,43 @@ public class GameManager : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
+    
+
+    public void correctMove()
     {
-        
+        correcteedPipes += 1;
+
+
+        Debug.Log("Correct Move");
+
+
+        if(correcteedPipes == totalPipes)
+        {
+            Debug.Log("You win");
+            win = true;
+            if (win == true)
+            {
+                fadeAnim.Play("FadeToBlack");
+                SceneManager.LoadScene(sceneToLoad);
+                StartCoroutine(DelayFade());
+            }
+        }
+
+
+       
+
     }
+    IEnumerator DelayFade()
+    {
+        yield return new WaitForSeconds(fadeTime);
+        SceneManager.LoadScene(sceneToLoad);
+    }
+
+
+    public void wrongMove()
+    {
+        correcteedPipes -= 1;
+    }
+
+
 }

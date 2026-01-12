@@ -5,31 +5,21 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     public float speed;
-
     public Rigidbody2D body;
 
-    void Start()
-    {
-        
-    }
+    float xInput;
+    float yInput;
 
-    // Update is called once per frame
     void Update()
     {
+        // Endast input här
+        xInput = Input.GetAxisRaw("Horizontal");
+        yInput = Input.GetAxisRaw("Vertical");
+    }
 
-        float xInput = Input.GetAxis("Horizontal");
-        float yInput = Input.GetAxis("Vertical");
-
-
-        if ( Mathf.Abs(xInput) >0)
-        {
-            body.velocity = new Vector2(xInput * speed, body.velocity.y);
-        }
-
-        if (Mathf.Abs(yInput) > 0)
-        {
-            body.velocity = new Vector2(body.velocity.x, yInput * speed);
-        }
-
+    void FixedUpdate()
+    {
+        // Physics här
+        body.velocity = new Vector2(xInput * speed, yInput * speed);
     }
 }

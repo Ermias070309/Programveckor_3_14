@@ -15,6 +15,16 @@ public class Pipepuzzle : MonoBehaviour
 
     int PossibleRots = 1;
 
+
+    GameManager gameManager;
+
+
+    private void Awake()
+    {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+    }
+
+
     private void Start()
     {
         PossibleRots = correctRotation.Length; 
@@ -27,6 +37,7 @@ public class Pipepuzzle : MonoBehaviour
             if (transform.eulerAngles.z == correctRotation[0] || transform.eulerAngles.z == correctRotation[1])
             {
                 isPlaced = true;
+                gameManager.correctMove();
             }
 
         }
@@ -35,6 +46,8 @@ public class Pipepuzzle : MonoBehaviour
             if (transform.eulerAngles.z == correctRotation[0])
             {
                 isPlaced = true;
+                gameManager.correctMove();
+
             }
 
         }
@@ -57,10 +70,13 @@ public class Pipepuzzle : MonoBehaviour
             if (transform.eulerAngles.z == correctRotation[0] || transform.eulerAngles.z == correctRotation[1] && isPlaced == false)
             {
                 isPlaced = true;
+                gameManager.correctMove();
+
             }
             else if (isPlaced == true)
             {
                 isPlaced = false;
+                gameManager.wrongMove();
             }
 
         }
@@ -69,10 +85,14 @@ public class Pipepuzzle : MonoBehaviour
             if (transform.eulerAngles.z == correctRotation[0] && isPlaced == false)
             {
                 isPlaced = true;
+                gameManager.correctMove();
+
             }
             else if (isPlaced == true)
             {
                 isPlaced = false;
+                gameManager.wrongMove();
+
             }
         }
 
