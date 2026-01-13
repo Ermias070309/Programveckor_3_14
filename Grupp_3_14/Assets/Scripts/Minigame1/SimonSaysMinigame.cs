@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class SimonSaysMinigame : MonoBehaviour
 {
     [SerializeField] GameObject[] buttons;
@@ -24,28 +25,6 @@ public class SimonSaysMinigame : MonoBehaviour
     Color32 white = new Color32(255, 255, 255, 255);
 
     public float lightSpeed;
-
-    private void OnEnable()
-    {
-        level = 0;
-        buttonsClicked = 0;
-        colorOrderRunCount = -1;
-        won = false;
-
-        for(int i = 0; i < lightOrder.Length; i++)
-        {
-            lightOrder[i] = Random.Range(0, buttons.Length);
-        }
-
-        for (int i = 0; i < rowLights.Length; i++)
-        {
-            rowLights[i].GetComponent<Image>().color = white;
-        }
-
-        level = 1;
-
-        StartCoroutine(ColorOrder());
-    }
 
     public void ButtonClickOrder(int button)
     {
