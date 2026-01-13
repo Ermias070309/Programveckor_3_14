@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
 public class Wire : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class Wire : MonoBehaviour
     Vector3 startPoint;
     Vector3 startPosition;
     bool isConnected = false;
+    bool counted = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -56,7 +58,14 @@ public class Wire : MonoBehaviour
         // turn on light
         lightOn.SetActive(true);
 
-        //Destroy the script
+        // count ONLY once
+        if (!counted)
+        {
+            counted = true;
+            ElectricityManager.instance.WireConnected();
+        }
+
+        // Destroy the script
         Destroy(this);
     }
 
