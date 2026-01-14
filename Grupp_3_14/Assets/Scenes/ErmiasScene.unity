@@ -203,6 +203,7 @@ GameObject:
   - component: {fileID: 405657930}
   - component: {fileID: 405657929}
   - component: {fileID: 405657933}
+  - component: {fileID: 405657934}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -364,6 +365,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &405657934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 405657928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fe8882db6fe5044c9c68d1688f27b4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startSpawnPoint: {x: 0, y: 0, z: 0}
 --- !u!1 &431161428
 GameObject:
   m_ObjectHideFlags: 0
@@ -772,7 +786,7 @@ MonoBehaviour:
   sceneToLoad: Christoffer Scene
   fadeAnim: {fileID: 1192974062}
   fadeTime: 2
-  puzzleID: Puzzle_1
+  "f\xF6rstaSpawn": 0
 --- !u!61 &1940027179
 BoxCollider2D:
   m_ObjectHideFlags: 0

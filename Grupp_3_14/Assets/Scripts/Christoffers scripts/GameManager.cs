@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
             win = true;
             if (win == true)
             {
-            
+                
                 StartCoroutine(FadeAndLoadScene());
 
            
