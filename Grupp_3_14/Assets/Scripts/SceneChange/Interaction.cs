@@ -10,12 +10,21 @@ public class Interaction : MonoBehaviour
     public float fadeTime = 0.5f;
     private bool playerInRange;
 
+    public string puzzleID = "Puzzle_1";
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
+            if (!collision.CompareTag("Player"))
+                return;
+
             playerInRange = true;
+
+            
+
+           
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
@@ -33,6 +42,9 @@ public class Interaction : MonoBehaviour
             fadeAnim.Play("FadeToBlack");
             StartCoroutine(DelayFade());
             Debug.Log("AAAAaa");
+
+
+
         }
     }
 

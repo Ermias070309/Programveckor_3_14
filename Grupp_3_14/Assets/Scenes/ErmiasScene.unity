@@ -251,6 +251,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   body: {fileID: 405657929}
+  startPosition: {x: -5, y: 1, z: 0}
 --- !u!212 &405657931
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -771,6 +772,7 @@ MonoBehaviour:
   sceneToLoad: Christoffer Scene
   fadeAnim: {fileID: 1192974062}
   fadeTime: 2
+  puzzleID: Puzzle_1
 --- !u!61 &1940027179
 BoxCollider2D:
   m_ObjectHideFlags: 0

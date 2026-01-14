@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public GameObject player;
+    public static GameManager Instance;
 
     public GameObject PipeHolder;
     public GameObject[] Pipes;
@@ -32,7 +34,7 @@ public class GameManager : MonoBehaviour
             Pipes[i] = PipeHolder.transform.GetChild(i).gameObject;
         }
 
-
+        Instance = this;
 
     }
 
@@ -52,9 +54,10 @@ public class GameManager : MonoBehaviour
             win = true;
             if (win == true)
             {
-                fadeAnim.Play("FadeToBlack");
-                SceneManager.LoadScene(sceneToLoad);
-                StartCoroutine(DelayFade());
+            
+                StartCoroutine(FadeAndLoadScene());
+
+           
             }
         }
 
@@ -62,11 +65,13 @@ public class GameManager : MonoBehaviour
        
 
     }
-    IEnumerator DelayFade()
+    IEnumerator FadeAndLoadScene()
     {
+        fadeAnim.Play("FadeToBlack");
         yield return new WaitForSeconds(fadeTime);
         SceneManager.LoadScene(sceneToLoad);
     }
+
 
 
     public void wrongMove()
