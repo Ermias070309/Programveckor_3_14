@@ -14,6 +14,9 @@ public class Interaction : MonoBehaviour
     
     public int förstaSpawn = 0;
 
+
+    public string puzzleID = "Puzzle_1";
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
@@ -39,28 +42,21 @@ public class Interaction : MonoBehaviour
 
     void Update()
     {
+        if (!playerInRange) return;
 
-        if (PlayerPrefs.GetInt("Puzzle_1_Completed", 0) == 1)
-            return;
+        // Blockera om puzzlet redan är klart
+        if (PlayerPrefs.GetInt(puzzleID + "_Completed", 0) == 1) return;
 
-
-        if (playerInRange && Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E))
         {
-
-            PlayerPrefs.SetFloat("PlayerX", player. position.x);
+            // Spara spelarens position
+            PlayerPrefs.SetFloat("PlayerX", player.position.x);
             PlayerPrefs.SetFloat("PlayerY", player.position.y);
             PlayerPrefs.SetFloat("PlayerZ", player.position.z);
-
             PlayerPrefs.SetInt("HasReturnPos", 1);
-
-
-
 
             fadeAnim.Play("FadeToBlack");
             StartCoroutine(DelayFade());
-          
-
-
         }
     }
 

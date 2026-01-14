@@ -6,7 +6,7 @@ public class Playerspwan : MonoBehaviour
 {
     [SerializeField] private Vector3 startSpawnPoint;
 
-    void Awake()
+    void Start()
     {
         if (PlayerPrefs.GetInt("HasReturnPos", 0) == 1)
         {
@@ -15,14 +15,15 @@ public class Playerspwan : MonoBehaviour
                 PlayerPrefs.GetFloat("PlayerY"),
                 PlayerPrefs.GetFloat("PlayerZ")
             );
-
-            // Nollställ så nästa start blir normal
             PlayerPrefs.SetInt("HasReturnPos", 0);
         }
         else
         {
+
+
+            PlayerPrefs.DeleteKey("Puzzle_1_Completed");
+            PlayerPrefs.DeleteKey("Puzzle_2_Completed");
             transform.position = startSpawnPoint;
         }
-
     }
 }
