@@ -37,5 +37,7 @@ public class ElectricityManager : MonoBehaviour
     {
         messageText.text = "Electricity restored";
         messageText.gameObject.SetActive(true);
+        Debug.Log("test");
+
     }
 }
