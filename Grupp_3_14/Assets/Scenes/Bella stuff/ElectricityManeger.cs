@@ -18,6 +18,7 @@ public class ElectricityManager : MonoBehaviour
     public float fadeTime = 0.5f;
     public Animator fadeAnim;
 
+
     private void Awake()
     {
         instance = this;

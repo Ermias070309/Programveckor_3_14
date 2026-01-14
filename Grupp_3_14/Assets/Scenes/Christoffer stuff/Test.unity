@@ -498,6 +498,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   body: {fileID: 1920750069}
+  startPosition: {x: 0, y: 0, z: 0}
 --- !u!50 &1920750069
 Rigidbody2D:
   serializedVersion: 4
