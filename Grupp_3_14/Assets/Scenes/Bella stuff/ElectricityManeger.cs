@@ -8,8 +8,8 @@ public class ElectricityManager : MonoBehaviour
 {
     public static ElectricityManager instance;
 
-    public int totalWires = 7;
-    private int connectedWires = 0;
+    public int totalWires = 6;
+    private int connectedWires = -5;
 
     public TextMeshProUGUI messageText;
 
