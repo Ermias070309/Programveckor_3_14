@@ -39,6 +39,11 @@ public class Interaction : MonoBehaviour
 
     void Update()
     {
+
+        if (PlayerPrefs.GetInt("Puzzle_1_Completed", 0) == 1)
+            return;
+
+
         if (playerInRange && Input.GetKeyDown(KeyCode.E))
         {
 

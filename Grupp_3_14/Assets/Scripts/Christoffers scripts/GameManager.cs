@@ -51,14 +51,13 @@ public class GameManager : MonoBehaviour
         if(correcteedPipes == totalPipes)
         {
             Debug.Log("You win");
-            win = true;
-            if (win == true)
-            {
-                
-                StartCoroutine(FadeAndLoadScene());
+
+            PlayerPrefs.SetInt("Puzzle_1_Completed", 1);
+
+            StartCoroutine(FadeAndLoadScene());
 
            
-            }
+            
         }
 
 
