@@ -117,8 +117,19 @@ public class SlidingPuzzle : MonoBehaviour
             }
         }
 
-        // DEBUG: Log tile positions
-        Debug.Log($"Created {tiles.Count} tiles. First tile at: {tiles[0].transform.position}");
+        // ===== DEBUG: Lägg till dessa rader här =====
+        Debug.Log($"Created {tiles.Count} tiles");
+        if (tiles.Count > 0)
+        {
+            Debug.Log($"First tile position: {tiles[0].transform.position}");
+            Debug.Log($"First tile scale: {tiles[0].transform.localScale}");
+            Debug.Log($"GridContainer position: {gridContainer.position}");
+        }
+        else
+        {
+            Debug.LogError("NO TILES WERE CREATED!");
+        }
+        // ===== SLUT PÅ DEBUG =====
     }
 
     void CreateNumberText(GameObject tile, int number)
