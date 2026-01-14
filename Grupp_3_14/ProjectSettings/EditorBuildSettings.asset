@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Bellas Scene.unity
     guid: d39f43c9dfdc3044fa4b9ad02b9cec0b
+  - enabled: 1
+    path: Assets/Scenes/Minigame1.unity
+    guid: 3e1f7298cd4dd844f86713671e074ab2
   m_configObjects: {}

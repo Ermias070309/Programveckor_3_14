@@ -1,6 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SimonSaysMinigame : MonoBehaviour
@@ -25,20 +25,30 @@ public class SimonSaysMinigame : MonoBehaviour
 
     public float lightSpeed = 0.5f;
 
+    public string sceneToLoad;
+    public float fadeTime = 0.5f;
+    public Animator fadeAnim;
+
+    [Header("Puzzle Settings")]
+    public string puzzleID = "Puzzle_Simon";
+
     void Start()
     {
-        ResetGame();
-    }
+        // Kolla om spelaren redan klarat spelet
+        if (PlayerPrefs.GetInt(puzzleID + "_Completed", 0) == 1)
+        {
+            simonSaysGamePanel.SetActive(false);
+            return;
+        }
 
-    public void OpenPanel()
-    {
         simonSaysGamePanel.SetActive(true);
-        ResetGame();
+        StartCoroutine(StartGameNextFrame());
     }
 
-    public void ClosePanel()
+    private IEnumerator StartGameNextFrame()
     {
-        simonSaysGamePanel.SetActive(false);
+        yield return null;
+        ResetGame();
     }
 
     public void ButtonClickOrder(int button)
@@ -46,16 +56,12 @@ public class SimonSaysMinigame : MonoBehaviour
         buttonsClicked++;
 
         if (button == lightOrder[buttonsClicked - 1])
-        {
-            Debug.Log("Pass");
             passed = true;
-        }
         else
         {
-            Debug.Log("Failed");
             passed = false;
             won = false;
-            StartCoroutine(ColorBlink(red, true)); // Fel blink
+            StartCoroutine(ColorBlink(red, true));
             return;
         }
 
@@ -63,9 +69,8 @@ public class SimonSaysMinigame : MonoBehaviour
         {
             if (level == 5 && passed)
             {
-                Debug.Log("You won!");
                 won = true;
-                StartCoroutine(ColorBlink(green, false)); // Vinst blink
+                StartCoroutine(ColorBlink(green, false));
             }
             else if (passed)
             {
@@ -82,7 +87,6 @@ public class SimonSaysMinigame : MonoBehaviour
 
         for (int j = 0; j < 3; j++)
         {
-            // Blink alla knappar och rowLights
             foreach (var btn in buttons)
                 btn.GetComponent<Image>().color = colorToBlink;
 
@@ -100,9 +104,7 @@ public class SimonSaysMinigame : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
 
-        // Efter blink, återställ alla lampor
         ResetLights();
-
         EnableInteractableButtons();
 
         if (isError)
@@ -111,7 +113,12 @@ public class SimonSaysMinigame : MonoBehaviour
         }
         else if (won)
         {
-            ClosePanel();
+            // Spara att spelet är klart
+            PlayerPrefs.SetInt(puzzleID + "_Completed", 1);
+            PlayerPrefs.Save();
+
+            // Starta fade + scenbyte
+            StartCoroutine(LoadSceneAfterFade());
         }
     }
 
@@ -130,7 +137,6 @@ public class SimonSaysMinigame : MonoBehaviour
             rowLights[i].GetComponent<Image>().color = green;
             yield return new WaitForSeconds(lightSpeed);
 
-            // Återställ ljus direkt efter blink
             lightArray[lightOrder[i]].GetComponent<Image>().color = invisible;
         }
 
@@ -168,12 +174,18 @@ public class SimonSaysMinigame : MonoBehaviour
         won = false;
         passed = false;
 
-        // Skapa ny slumpordning
         for (int i = 0; i < lightOrder.Length; i++)
             lightOrder[i] = Random.Range(0, buttons.Length);
 
         ResetLights();
-
+        EnableInteractableButtons();
         StartCoroutine(ColorOrder());
+    }
+
+    IEnumerator LoadSceneAfterFade()
+    {
+        fadeAnim.SetTrigger("FadeOut");
+        yield return new WaitForSeconds(fadeTime);
+        SceneManager.LoadScene(sceneToLoad);
     }
 }
