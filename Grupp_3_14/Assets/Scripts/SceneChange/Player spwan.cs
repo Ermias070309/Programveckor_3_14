@@ -23,6 +23,8 @@ public class Playerspwan : MonoBehaviour
 
             PlayerPrefs.DeleteKey("Puzzle_1_Completed");
             PlayerPrefs.DeleteKey("Puzzle_2_Completed");
+            PlayerPrefs.DeleteKey("Puzzle_3_Completed");
+            PlayerPrefs.DeleteKey("Puzzle_4_Completed");
             transform.position = startSpawnPoint;
         }
     }

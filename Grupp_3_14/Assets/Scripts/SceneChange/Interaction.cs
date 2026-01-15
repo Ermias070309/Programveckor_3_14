@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,26 +10,34 @@ public class Interaction : MonoBehaviour
 
     private bool playerInRange;
     private Transform player;
-    
-    public int förstaSpawn = 0;
-
 
     public string puzzleID = "Puzzle_1";
 
+    public SpriteRenderer interactIcon;
+
+    private void Start()
+    {
+        // Ikonen ska vara dold från start
+        if (interactIcon != null)
+            interactIcon.enabled = false;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
-        {
-            if (!collision.CompareTag("Player"))
-                return;
+        if (!collision.CompareTag("Player"))
+            return;
 
-            playerInRange = true;
+        // Visa inget om pusslet redan är klart
+        if (PlayerPrefs.GetInt(puzzleID + "_Completed", 0) == 1)
+            return;
 
-            player = collision.transform;
+        playerInRange = true;
+        player = collision.transform;
 
-
-        }
+        if (interactIcon != null)
+            interactIcon.enabled = true;
     }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (!collision.CompareTag("Player"))
@@ -38,22 +45,27 @@ public class Interaction : MonoBehaviour
 
         playerInRange = false;
         player = null;
+
+        if (interactIcon != null)
+            interactIcon.enabled = false;
     }
 
     void Update()
     {
         if (!playerInRange) return;
 
-        // Blockera om puzzlet redan är klart
-        if (PlayerPrefs.GetInt(puzzleID + "_Completed", 0) == 1) return;
+        if (PlayerPrefs.GetInt(puzzleID + "_Completed", 0) == 1)
+            return;
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            // Spara spelarens position
             PlayerPrefs.SetFloat("PlayerX", player.position.x);
             PlayerPrefs.SetFloat("PlayerY", player.position.y);
             PlayerPrefs.SetFloat("PlayerZ", player.position.z);
             PlayerPrefs.SetInt("HasReturnPos", 1);
+
+            if (interactIcon != null)
+                interactIcon.enabled = false;
 
             fadeAnim.Play("FadeToBlack");
             StartCoroutine(DelayFade());
