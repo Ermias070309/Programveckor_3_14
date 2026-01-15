@@ -25,81 +25,48 @@ public class Pipepuzzle : MonoBehaviour
     }
 
 
-    private void Start()
+    void Start()
     {
-        PossibleRots = correctRotation.Length; 
+        PossibleRots = correctRotation.Length;
 
         int rand = Random.Range(0, rotations.Length);
         transform.eulerAngles = new Vector3(0, 0, rotations[rand]);
 
-        if(PossibleRots > 1)
-        {
-            if (transform.eulerAngles.z == correctRotation[0] || transform.eulerAngles.z == correctRotation[1])
-            {
-                isPlaced = true;
-                gameManager.correctMove();
-            }
-
-        }
-        else 
-        {
-            if (transform.eulerAngles.z == correctRotation[0])
-            {
-                isPlaced = true;
-                gameManager.correctMove();
-
-            }
-
-        }
-        
-
-
-
-
+        CheckPlacement();
     }
-
 
     private void OnMouseDown()
     {
-        transform.Rotate(new Vector3(0, 0, 90));
-        
-
-        if (PossibleRots > 1)
-        {
-
-            if (transform.eulerAngles.z == correctRotation[0] || transform.eulerAngles.z == correctRotation[1] && isPlaced == false)
-            {
-                isPlaced = true;
-                gameManager.correctMove();
-
-            }
-            else if (isPlaced == true)
-            {
-                isPlaced = false;
-                gameManager.wrongMove();
-            }
-
-        }
-        else
-        {
-            if (transform.eulerAngles.z == correctRotation[0] && isPlaced == false)
-            {
-                isPlaced = true;
-                gameManager.correctMove();
-
-            }
-            else if (isPlaced == true)
-            {
-                isPlaced = false;
-                gameManager.wrongMove();
-
-            }
-        }
-
-        
-
-
+        transform.Rotate(0, 0, 90);
+        CheckPlacement();
     }
 
+    void CheckPlacement()
+    {
+        float z = Mathf.Round(transform.eulerAngles.z);
+
+        bool isCorrect = false;
+
+        for (int i = 0; i < correctRotation.Length; i++)
+        {
+            if (z == correctRotation[i])
+            {
+                isCorrect = true;
+                break;
+            }
+        }
+
+        //  Endast om status ändras
+        if (isCorrect && !isPlaced)
+        {
+            isPlaced = true;
+            gameManager.correctMove();
+        }
+        else if (!isCorrect && isPlaced)
+        {
+            isPlaced = false;
+            gameManager.wrongMove();
+        }
+    }
 
 }
