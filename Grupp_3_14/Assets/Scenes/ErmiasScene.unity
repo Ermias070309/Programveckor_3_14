@@ -336,7 +336,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   body: {fileID: 405657929}
-  startPosition: {x: -5, y: 1, z: 0}
+  startPosition: {x: 0, y: 0, z: 0}
 --- !u!212 &405657931
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -574,7 +574,7 @@ GameObject:
   m_Component:
   - component: {fileID: 940209941}
   - component: {fileID: 940209940}
-  - component: {fileID: 940209939}
+  - component: {fileID: 940209942}
   m_Layer: 0
   m_Name: House2
   m_TagString: Untagged
@@ -582,24 +582,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &940209939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 940209938}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11b4d938d56901646843c0a05d0b8b4e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneToLoad: House2
-  fadeAnim: {fileID: 1192974062}
-  fadeTime: 2
-  puzzleID: 
-  interactIcon: {fileID: 0}
-  returnID: Door_2
 --- !u!61 &940209940
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -660,6 +642,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &940209942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 940209938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75cad239a096081448dc56a986774a87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneToLoad: House2
+  targetSpawnPosition: {x: 0, y: 0, z: 0}
+  fadeAnim: {fileID: 1192974062}
+  fadeTime: 2
+  puzzleID: 
+  interactIcon: {fileID: 0}
 --- !u!1 &1102760959
 GameObject:
   m_ObjectHideFlags: 0
@@ -669,8 +669,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1102760962}
+  - component: {fileID: 1102760963}
   - component: {fileID: 1102760961}
-  - component: {fileID: 1102760960}
   m_Layer: 0
   m_Name: House1
   m_TagString: Untagged
@@ -678,24 +678,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1102760960
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1102760959}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11b4d938d56901646843c0a05d0b8b4e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneToLoad: House1
-  fadeAnim: {fileID: 1192974062}
-  fadeTime: 2
-  puzzleID: 
-  interactIcon: {fileID: 0}
-  returnID: Door_1
 --- !u!61 &1102760961
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -756,6 +738,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1102760963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1102760959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75cad239a096081448dc56a986774a87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneToLoad: House1
+  targetSpawnPosition: {x: 0, y: 0, z: 0}
+  fadeAnim: {fileID: 1192974062}
+  fadeTime: 2
+  puzzleID: 
+  interactIcon: {fileID: 0}
 --- !u!1 &1104802558
 GameObject:
   m_ObjectHideFlags: 0

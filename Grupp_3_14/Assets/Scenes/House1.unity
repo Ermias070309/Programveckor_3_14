@@ -307,11 +307,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 110008468}
+  - component: {fileID: 110008463}
   - component: {fileID: 110008467}
   - component: {fileID: 110008466}
   - component: {fileID: 110008465}
   - component: {fileID: 110008464}
-  - component: {fileID: 110008463}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -331,7 +331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fe8882db6fe5044c9c68d1688f27b4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startSpawnPoint: {x: 0, y: 0, z: 0}
+  startSpawnPoint: {x: 2.3, y: -3.7, z: 0}
 --- !u!61 &110008464
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -418,7 +418,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   body: {fileID: 110008465}
-  startPosition: {x: -5, y: 1, z: 0}
+  startPosition: {x: 2, y: -3.5, z: 0}
 --- !u!212 &110008467
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -480,7 +480,7 @@ Transform:
   m_GameObject: {fileID: 110008462}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.31, y: -3.67, z: 0}
+  m_LocalPosition: {x: 2.27, y: -3.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1195,8 +1195,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1870687513}
-  - component: {fileID: 1870687512}
   - component: {fileID: 1870687514}
+  - component: {fileID: 1870687512}
   m_Layer: 0
   m_Name: House1
   m_TagString: Untagged
@@ -1281,7 +1281,7 @@ MonoBehaviour:
   fadeTime: 2
   puzzleID: 
   interactIcon: {fileID: 0}
-  returnID: Door_1
+  returnID: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
