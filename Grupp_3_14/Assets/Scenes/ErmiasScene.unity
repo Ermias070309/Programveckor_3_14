@@ -655,11 +655,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneToLoad: House2
-  targetSpawnPosition: {x: 0, y: 0, z: 0}
   fadeAnim: {fileID: 1192974062}
   fadeTime: 2
   puzzleID: 
   interactIcon: {fileID: 0}
+  returnID: Door_1
 --- !u!1 &1102760959
 GameObject:
   m_ObjectHideFlags: 0
@@ -751,11 +751,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneToLoad: House1
-  targetSpawnPosition: {x: 0, y: 0, z: 0}
   fadeAnim: {fileID: 1192974062}
   fadeTime: 2
   puzzleID: 
   interactIcon: {fileID: 0}
+  returnID: Door_1
 --- !u!1 &1104802558
 GameObject:
   m_ObjectHideFlags: 0

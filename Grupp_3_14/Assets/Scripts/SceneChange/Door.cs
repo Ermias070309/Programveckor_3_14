@@ -1,28 +1,29 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Interaction : MonoBehaviour
+public class Door : MonoBehaviour
 {
     [Header("Scene")]
-    public string sceneToLoad;
+    [SerializeField] private string sceneToLoad;
 
-    [Header("Puzzle")]
-    public string puzzleID = "Puzzle_1";
-    public string returnID = "Puzzle1Exit";
+    [Header("Spawn")]
+    [SerializeField] private string exitSpawnID;
 
-    [Header("UI")]
-    public SpriteRenderer interactIcon;
+    [Header("Interaction")]
+    [SerializeField] private KeyCode interactKey = KeyCode.E;
+    [SerializeField] private SpriteRenderer interactIcon;
 
-    [Header("Fade")]
-    public Animator fadeAnim;
-    public float fadeTime = 0.5f;
+    [Header("Fade (optional)")]
+    [SerializeField] private Animator fadeAnim;
+    [SerializeField] private float fadeTime = 0.3f;
 
     private bool playerInRange;
-    private Transform player;
 
     private void Awake()
     {
+        // Säkerställ att ikonen alltid är dold från start
         if (interactIcon != null)
             interactIcon.enabled = false;
     }
@@ -31,11 +32,7 @@ public class Interaction : MonoBehaviour
     {
         if (!collision.CompareTag("Player")) return;
 
-        if (PlayerPrefs.GetInt(puzzleID + "_Completed", 0) == 1)
-            return;
-
         playerInRange = true;
-        player = collision.transform;
 
         if (interactIcon != null)
             interactIcon.enabled = true;
@@ -46,7 +43,6 @@ public class Interaction : MonoBehaviour
         if (!collision.CompareTag("Player")) return;
 
         playerInRange = false;
-        player = null;
 
         if (interactIcon != null)
             interactIcon.enabled = false;
@@ -55,31 +51,29 @@ public class Interaction : MonoBehaviour
     private void Update()
     {
         if (!playerInRange) return;
-        if (PlayerPrefs.GetInt(puzzleID + "_Completed", 0) == 1) return;
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(interactKey))
         {
             if (interactIcon != null)
                 interactIcon.enabled = false;
 
-            //  VIKTIG RAD
-            PlayerPrefs.SetString("SpawnID", returnID);
+            // Säg till nästa scen var spelaren ska spawnas
+            PlayerPrefs.SetString("SpawnID", exitSpawnID);
 
             if (fadeAnim != null)
             {
                 fadeAnim.Play("FadeToBlack");
-                StartCoroutine(LoadAfterFade());
+                Invoke(nameof(LoadScene), fadeTime);
             }
             else
             {
-                SceneManager.LoadScene(sceneToLoad);
+                LoadScene();
             }
         }
     }
 
-    IEnumerator LoadAfterFade()
+    private void LoadScene()
     {
-        yield return new WaitForSeconds(fadeTime);
         SceneManager.LoadScene(sceneToLoad);
     }
 }

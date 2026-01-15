@@ -331,7 +331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fe8882db6fe5044c9c68d1688f27b4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startSpawnPoint: {x: 2.3, y: -3.7, z: 0}
+  defaultSpawn: {fileID: 478570099}
 --- !u!61 &110008464
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -418,7 +418,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   body: {fileID: 110008465}
-  startPosition: {x: 2, y: -3.5, z: 0}
 --- !u!212 &110008467
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -663,6 +662,37 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -9.12, y: -0.09203386, z: 0}
   m_LocalScale: {x: 1, y: 10.69, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &478570098
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 478570099}
+  m_Layer: 0
+  m_Name: Spawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &478570099
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 478570098}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.88, y: -3.4, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1195,8 +1225,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1870687513}
-  - component: {fileID: 1870687514}
   - component: {fileID: 1870687512}
+  - component: {fileID: 1870687514}
   m_Layer: 0
   m_Name: House1
   m_TagString: Untagged
@@ -1273,15 +1303,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1870687510}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75cad239a096081448dc56a986774a87, type: 3}
+  m_Script: {fileID: 11500000, guid: f14308809be55124da6fc0c88a2c0f67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: ErmiasScene
+  sceneToLoad: MainMap
+  exitSpawnID: House1_Exit
+  interactKey: 101
+  interactIcon: {fileID: 0}
   fadeAnim: {fileID: 347716017}
   fadeTime: 2
-  puzzleID: 
-  interactIcon: {fileID: 0}
-  returnID: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1296,3 +1326,4 @@ SceneRoots:
   - {fileID: 1870687513}
   - {fileID: 4189458}
   - {fileID: 1567173628}
+  - {fileID: 478570099}

@@ -5,29 +5,27 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    
     public static GameManager Instance;
 
     public GameObject PipeHolder;
     public GameObject[] Pipes;
-    public bool win = false;
-    
-    //Scene och fade variabler
+
+    [Header("Scene")]
     public string sceneToLoad;
+
+    [Header("Spawn")]
+    public string returnSpawnID = "Puzzle1Exit";
+
+    [Header("Fade")]
     public float fadeTime = 0.5f;
     public Animator fadeAnim;
 
-    [SerializeField]
-    int totalPipes = 0;
-    [SerializeField]
-    int correcteedPipes = 0;
+    private int totalPipes = 0;
+    private int correctedPipes = 0;
 
-
-    // Start is called before the first frame update
     void Start()
     {
         totalPipes = PipeHolder.transform.childCount;
-
         Pipes = new GameObject[totalPipes];
 
         for (int i = 0; i < Pipes.Length; i++)
@@ -36,51 +34,35 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
-
     }
-
-    
 
     public void correctMove()
     {
-        correcteedPipes += 1;
+        correctedPipes++;
 
-
-        Debug.Log("Correct Move");
-
-
-        if(correcteedPipes == totalPipes)
+        if (correctedPipes == totalPipes)
         {
-            Debug.Log("You win");
-
+            // Markera pussel klart
             PlayerPrefs.SetInt("Puzzle_1_Completed", 1);
 
+            // Sätt spawn för återkomst
+            PlayerPrefs.SetString("SpawnID", returnSpawnID);
+
             StartCoroutine(FadeAndLoadScene());
-
-           
-            
         }
-
-
-       
-
     }
-    IEnumerator FadeAndLoadScene()
-    {
-        fadeAnim.Play("FadeToBlack");
-        yield return new WaitForSeconds(fadeTime);
-        SceneManager.LoadScene(sceneToLoad);
-    }
-
-
 
     public void wrongMove()
     {
-        correcteedPipes -= 1;
+        correctedPipes--;
     }
 
+    IEnumerator FadeAndLoadScene()
+    {
+        if (fadeAnim != null)
+            fadeAnim.Play("FadeToBlack");
 
-
-  
-
+        yield return new WaitForSeconds(fadeTime);
+        SceneManager.LoadScene(sceneToLoad);
+    }
 }

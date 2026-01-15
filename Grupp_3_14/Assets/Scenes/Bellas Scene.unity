@@ -1416,7 +1416,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   totalWires: 6
   messageText: {fileID: 1331661297}
-  sceneToLoad: ErmiasScene
+  sceneToLoad: MainMap
   fadeTime: 2
   fadeAnim: {fileID: 708815715}
 --- !u!4 &1478842893

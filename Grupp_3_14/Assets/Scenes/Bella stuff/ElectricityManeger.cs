@@ -14,10 +14,15 @@ public class ElectricityManager : MonoBehaviour
 
     public TextMeshProUGUI messageText;
 
+    [Header("Scene")]
     public string sceneToLoad;
+
+    [Header("Spawn")]
+    public string returnSpawnID = "Puzzle2Exit";
+
+    [Header("Fade")]
     public float fadeTime = 0.5f;
     public Animator fadeAnim;
-
 
     private void Awake()
     {
@@ -26,7 +31,8 @@ public class ElectricityManager : MonoBehaviour
 
     private void Start()
     {
-        messageText.gameObject.SetActive(false);
+        if (messageText != null)
+            messageText.gameObject.SetActive(false);
     }
 
     public void WireConnected()
@@ -41,29 +47,26 @@ public class ElectricityManager : MonoBehaviour
 
     void ElectricityRestored()
     {
-        messageText.text = "Electricity restored";
-        messageText.gameObject.SetActive(true);
-        Debug.Log("test");
-
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
+        if (messageText != null)
         {
-            PlayerPrefs.SetFloat("PlayerX", player.transform.position.x);
-            PlayerPrefs.SetFloat("PlayerY", player.transform.position.y);
-            PlayerPrefs.SetFloat("PlayerZ", player.transform.position.z);
-            PlayerPrefs.SetInt("HasReturnPos", 1);
+            messageText.text = "Electricity restored";
+            messageText.gameObject.SetActive(true);
         }
 
+        //  Sätt spawn-punkt för när vi kommer tillbaka
+        PlayerPrefs.SetString("SpawnID", returnSpawnID);
+
+        //  Markera pussel klart
         PlayerPrefs.SetInt("Puzzle_2_Completed", 1);
 
         StartCoroutine(FadeAndLoadScene());
     }
 
-
-
     IEnumerator FadeAndLoadScene()
     {
-        fadeAnim.Play("FadeToBlack");
+        if (fadeAnim != null)
+            fadeAnim.Play("FadeToBlack");
+
         yield return new WaitForSeconds(fadeTime);
         SceneManager.LoadScene(sceneToLoad);
     }

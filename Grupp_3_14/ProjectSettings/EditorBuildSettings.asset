@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Main menu.unity
     guid: 2b2acbee79a3b194b9973c65c9cda2a7
   - enabled: 1
+    path: Assets/Scenes/MainMap.unity
+    guid: cd58fb73e2d9b314f9eb7eba87b52e0d
+  - enabled: 1
     path: Assets/Scenes/ErmiasScene.unity
     guid: 4e653f0cf30a1fa4b99a28370068d665
   - enabled: 1

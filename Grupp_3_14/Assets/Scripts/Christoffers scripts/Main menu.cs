@@ -7,12 +7,7 @@ public class Mainmenu : MonoBehaviour
     
     public void PlayGame()
     {
-        PlayerPrefs.DeleteKey("Puzzle_1_Completed");
-        PlayerPrefs.DeleteKey("Puzzle_2_Completed");
-
-        PlayerPrefs.DeleteKey("PlayerX");
-        PlayerPrefs.DeleteKey("PlayerY"); 
-        PlayerPrefs.DeleteKey("PlayerZ");
+        PlayerPrefs.DeleteAll();
 
         SceneManager.LoadSceneAsync(1);
        

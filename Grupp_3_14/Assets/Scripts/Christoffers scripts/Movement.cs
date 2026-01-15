@@ -10,7 +10,7 @@ public class Movement : MonoBehaviour
     float xInput;
     float yInput;
 
-    [SerializeField] private Vector3 startPosition;
+    
 
     void Start()
     {

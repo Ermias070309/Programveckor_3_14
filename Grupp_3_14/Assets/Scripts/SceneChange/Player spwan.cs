@@ -4,28 +4,23 @@ using UnityEngine;
 
 public class Playerspwan : MonoBehaviour
 {
-    [SerializeField] private Vector3 startSpawnPoint;
+    
 
-    void Start()
-    {
-        if (PlayerPrefs.GetInt("HasReturnPos", 0) == 1)
+
+        [SerializeField] private Transform defaultSpawn;
+
+        void Start()
         {
-            transform.position = new Vector3(
-                PlayerPrefs.GetFloat("PlayerX"),
-                PlayerPrefs.GetFloat("PlayerY"),
-                PlayerPrefs.GetFloat("PlayerZ")
-            );
-            PlayerPrefs.SetInt("HasReturnPos", 0);
-        }
-        else
-        {
+            string spawnID = PlayerPrefs.GetString("SpawnID", "Start");
 
+            Transform spawnPoint = GameObject.Find("Spawn_" + spawnID)?.transform;
 
-            PlayerPrefs.DeleteKey("Puzzle_1_Completed");
-            PlayerPrefs.DeleteKey("Puzzle_2_Completed");
-            PlayerPrefs.DeleteKey("Puzzle_3_Completed");
-            PlayerPrefs.DeleteKey("Puzzle_Simon_Completed");
-            transform.position = startSpawnPoint;
+            if (spawnPoint != null)
+                transform.position = spawnPoint.position;
+            else
+                transform.position = defaultSpawn.position;
+
+            PlayerPrefs.DeleteKey("SpawnID");
         }
-    }
+    
 }
