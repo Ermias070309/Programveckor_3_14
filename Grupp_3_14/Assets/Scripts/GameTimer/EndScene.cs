@@ -13,6 +13,6 @@ public class EndScene : MonoBehaviour
             GameTimer.Instance.StartTimer();
         }
 
-        SceneManager.LoadSceneAsync(3);
+        SceneManager.LoadSceneAsync(1);
     }
 }
