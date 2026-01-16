@@ -1155,6 +1155,7 @@ MonoBehaviour:
   lightOrder: 010000000200000003000000040000000500000006000000070000000800000009000000
   lightSpeed: 0.4
   sceneToLoad: House2
+  returnSpawnID: Puzzle3Exit
   fadeTime: 2
   fadeAnim: {fileID: 384994873}
   puzzleID: Puzzle_Simon
