@@ -1,17 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 public class Mainmenu : MonoBehaviour
 {
-    
+   
+
     public void PlayGame()
     {
-        PlayerPrefs.DeleteAll();
+        // Starta timern när spelet börjar
+        if (GameTimer.Instance != null)
+        {
+            GameTimer.Instance.StartTimer();
+        }
 
         SceneManager.LoadSceneAsync(1);
-       
     }
-
-
 }
