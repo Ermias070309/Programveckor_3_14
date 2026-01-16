@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+
+
 public class SimonSaysMinigame : MonoBehaviour
 {
     [SerializeField] GameObject[] buttons;
@@ -23,9 +25,16 @@ public class SimonSaysMinigame : MonoBehaviour
     Color32 invisible = new Color32(255, 255, 255, 0);
     Color32 white = new Color32(255, 255, 255, 255);
 
+    [Header("Gameplay")]
     public float lightSpeed = 0.5f;
 
+    [Header("Scene")]
     public string sceneToLoad;
+
+    [Header("Spawn")]
+    public string returnSpawnID = "PuzzleSimonExit";
+
+    [Header("Fade")]
     public float fadeTime = 0.5f;
     public Animator fadeAnim;
 
@@ -34,7 +43,7 @@ public class SimonSaysMinigame : MonoBehaviour
 
     void Start()
     {
-        // Kolla om spelaren redan klarat spelet
+        // Om pusslet redan är klart – visa inte panelen
         if (PlayerPrefs.GetInt(puzzleID + "_Completed", 0) == 1)
         {
             simonSaysGamePanel.SetActive(false);
@@ -45,7 +54,7 @@ public class SimonSaysMinigame : MonoBehaviour
         StartCoroutine(StartGameNextFrame());
     }
 
-    private IEnumerator StartGameNextFrame()
+    IEnumerator StartGameNextFrame()
     {
         yield return null;
         ResetGame();
@@ -56,7 +65,9 @@ public class SimonSaysMinigame : MonoBehaviour
         buttonsClicked++;
 
         if (button == lightOrder[buttonsClicked - 1])
+        {
             passed = true;
+        }
         else
         {
             passed = false;
@@ -113,11 +124,15 @@ public class SimonSaysMinigame : MonoBehaviour
         }
         else if (won)
         {
-            // Spara att spelet är klart
+            // Markera pussel klart
             PlayerPrefs.SetInt(puzzleID + "_Completed", 1);
+
+            // Sätt spawnpunkt för återkomst
+            PlayerPrefs.SetString("SpawnID", returnSpawnID);
+
             PlayerPrefs.Save();
 
-            // Starta fade + scenbyte
+            // Fade + scenbyte
             StartCoroutine(LoadSceneAfterFade());
         }
     }
@@ -184,8 +199,11 @@ public class SimonSaysMinigame : MonoBehaviour
 
     IEnumerator LoadSceneAfterFade()
     {
-        fadeAnim.SetTrigger("FadeOut");
+        if (fadeAnim != null)
+            fadeAnim.Play("FadeToBlack");
+
         yield return new WaitForSeconds(fadeTime);
         SceneManager.LoadScene(sceneToLoad);
     }
 }
+
