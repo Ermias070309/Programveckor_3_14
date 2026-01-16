@@ -13,6 +13,9 @@ public class Mainmenu : MonoBehaviour
             GameTimer.Instance.StartTimer();
         }
 
+
+        PlayerPrefs.DeleteAll();
+
         SceneManager.LoadSceneAsync(1);
     }
 }

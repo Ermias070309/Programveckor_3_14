@@ -408,7 +408,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 471723950}
-  - component: {fileID: 471723953}
   - component: {fileID: 471723949}
   - component: {fileID: 471723952}
   - component: {fileID: 471723951}
@@ -499,7 +498,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneToLoad: Minigame1
-  puzzleID: Puzzle_3
+  puzzleID: Puzzle_Simon
   returnID: 
   interactIcon: {fileID: 1139739731}
   fadeAnim: {fileID: 86382021}
@@ -549,23 +548,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.0825149, y: 2.3803527}
   m_EdgeRadius: 0
---- !u!114 &471723953
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 471723948}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ffe9cfc68ffc1f40a009fb8412b1662, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  puzzleID: Puzzle_3
-  requiredPuzzles:
-  - Puzzle_2
-  lockedText: {fileID: 0}
-  messageTime: 2
 --- !u!1 &510349434
 GameObject:
   m_ObjectHideFlags: 0
