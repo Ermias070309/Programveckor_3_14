@@ -1230,9 +1230,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11b4d938d56901646843c0a05d0b8b4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: 
-  puzzleID: Puzzle_1
-  returnID: Puzzle1Exit
+  sceneToLoad: BrokenPicture
+  puzzleID: 
+  returnID: 
   interactIcon: {fileID: 2081038879}
   fadeAnim: {fileID: 347716017}
   fadeTime: 2
@@ -1355,7 +1355,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1671810307}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ffe9cfc68ffc1f40a009fb8412b1662, type: 3}
   m_Name: 
