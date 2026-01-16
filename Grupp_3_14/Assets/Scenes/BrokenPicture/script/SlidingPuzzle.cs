@@ -20,11 +20,14 @@ public class SlidingPuzzle : MonoBehaviour
     public GameObject loseScreen;
 
     [Header("GAME SETTINGS")]
-    public float totalTime = 120f;
+    public float totalTime = 180f; // ÄNDRAT FRÅN 120f TILL 180f (3 MINUTER)
     public int gridSize = 4;
 
+    // VARIABLER FÖR ATT HÅLLA KOLL PÅ BRICKOR OCH POSITIONER
     private List<GameObject> tiles = new List<GameObject>();
-    private int emptyIndex = 15;
+    private Dictionary<Vector2Int, GameObject> tileAtPosition = new Dictionary<Vector2Int, GameObject>();
+    private Vector2Int emptyGridPos = new Vector2Int(3, 3); // Nedre högra hörnet (kolumn, rad)
+
     private float currentTime;
     private bool gameActive = false;
     private bool isShowingPreview = true;
@@ -59,7 +62,7 @@ public class SlidingPuzzle : MonoBehaviour
     void SetupGridPositions()
     {
         gridPositions = new Vector2[gridSize, gridSize];
-        float spacing = 3.5f; // CHANGED FROM 2.0f to 3.5f (BIGGER!)
+        float spacing = 3.5f;
         float offsetX = -((gridSize - 1) * spacing) / 2f;
         float offsetY = ((gridSize - 1) * spacing) / 2f;
 
@@ -76,60 +79,66 @@ public class SlidingPuzzle : MonoBehaviour
 
     void CreatePuzzleTiles()
     {
+        // RENSA ALLT FÖRST
         foreach (Transform child in gridContainer)
         {
             Destroy(child.gameObject);
         }
         tiles.Clear();
+        tileAtPosition.Clear();
 
         int tileNumber = 1;
         for (int row = 0; row < gridSize; row++)
         {
             for (int col = 0; col < gridSize; col++)
             {
-                if (row == gridSize - 1 && col == gridSize - 1)
-                    continue;
+                // SKAPA BARA BRICKOR FÖR POSITIONER SOM INTE ÄR TOM
+                if (!(row == gridSize - 1 && col == gridSize - 1))
+                {
+                    GameObject tile = Instantiate(tilePrefab, gridContainer);
 
-                GameObject tile = Instantiate(tilePrefab, gridContainer);
-                tile.transform.localPosition = new Vector3(
-                    gridPositions[row, col].x,
-                    gridPositions[row, col].y,
-                    0
-                );
+                    // Använd gridPositions för att placera brickan
+                    Vector3 position = new Vector3(
+                        gridPositions[row, col].x,
+                        gridPositions[row, col].y,
+                        0
+                    );
 
-                // ADDED: Scale the tile to make it bigger
-                tile.transform.localScale = Vector3.one * 1.8f; // 1.8x bigger
+                    tile.transform.localPosition = position;
+                    tile.transform.localScale = Vector3.one * 1.8f;
 
-                SpriteRenderer renderer = tile.GetComponent<SpriteRenderer>();
-                float hue = (float)tileNumber / 16f;
-                Color color = Color.HSVToRGB(hue, 0.8f, 1f);
-                renderer.color = color;
+                    // Sätt färg
+                    SpriteRenderer renderer = tile.GetComponent<SpriteRenderer>();
+                    float hue = (float)tileNumber / 16f;
+                    renderer.color = Color.HSVToRGB(hue, 0.8f, 1f);
 
-                TileInfo info = tile.GetComponent<TileInfo>();
-                if (info == null) info = tile.AddComponent<TileInfo>();
-                info.correctRow = row;
-                info.correctCol = col;
-                info.tileNumber = tileNumber;
+                    // Lägg till TileInfo
+                    TileInfo info = tile.GetComponent<TileInfo>();
+                    if (info == null) info = tile.AddComponent<TileInfo>();
+                    info.correctRow = row;
+                    info.correctCol = col;
+                    info.tileNumber = tileNumber;
 
-                CreateNumberText(tile, tileNumber);
-                tiles.Add(tile);
-                tileNumber++;
+                    // Lägg till nummertext
+                    CreateNumberText(tile, tileNumber);
+
+                    // Spara brickan i listan
+                    tiles.Add(tile);
+
+                    // Spara positionen i dictionary
+                    Vector2Int gridPos = new Vector2Int(col, row); // x = kolumn, y = rad
+                    tileAtPosition[gridPos] = tile;
+
+                    tileNumber++;
+                }
             }
         }
 
-        // ===== DEBUG: Lägg till dessa rader här =====
-        Debug.Log($"Created {tiles.Count} tiles");
-        if (tiles.Count > 0)
-        {
-            Debug.Log($"First tile position: {tiles[0].transform.position}");
-            Debug.Log($"First tile scale: {tiles[0].transform.localScale}");
-            Debug.Log($"GridContainer position: {gridContainer.position}");
-        }
-        else
-        {
-            Debug.LogError("NO TILES WERE CREATED!");
-        }
-        // ===== SLUT PÅ DEBUG =====
+        // Sätt den tomma positionen
+        emptyGridPos = new Vector2Int(gridSize - 1, gridSize - 1);
+
+        Debug.Log($"Skapade {tiles.Count} brickor");
+        Debug.Log($"Tom position: ({emptyGridPos.x}, {emptyGridPos.y})");
     }
 
     void CreateNumberText(GameObject tile, int number)
@@ -140,8 +149,8 @@ public class SlidingPuzzle : MonoBehaviour
 
         TextMesh text = textObj.AddComponent<TextMesh>();
         text.text = number.ToString();
-        text.fontSize = 80; // INCREASED FROM 50 to 80 (bigger numbers)
-        text.characterSize = 0.08f; // ADJUSTED for scaling
+        text.fontSize = 80;
+        text.characterSize = 0.08f;
         text.anchor = TextAnchor.MiddleCenter;
         text.color = Color.black;
         text.alignment = TextAlignment.Center;
@@ -168,45 +177,88 @@ public class SlidingPuzzle : MonoBehaviour
         UpdateTimerDisplay();
     }
 
+    // ENKEL SHUFFLE SOM INTE ÖVERLAPPAR BRICKOR
     void ShufflePuzzle()
     {
-        // Flytta alla brickor slumpmässigt
-        for (int i = 0; i < 50; i++)
+        Debug.Log("Startar shuffle utan överlappning...");
+
+        // 1. SKAPA EN LISTA MED ALLA POSITIONER SOM KAN HA BRICKOR
+        List<Vector2Int> availablePositions = new List<Vector2Int>();
+        for (int row = 0; row < gridSize; row++)
         {
-            // Välj en slumpmässig bricka
-            GameObject tile = tiles[Random.Range(0, tiles.Count)];
-
-            // Hitta en slumpmässig position i gridet
-            int randomRow = Random.Range(0, gridSize);
-            int randomCol = Random.Range(0, gridSize);
-
-            // Flytta brickan dit
-            tile.transform.localPosition = new Vector3(
-                gridPositions[randomRow, randomCol].x,
-                gridPositions[randomRow, randomCol].y,
-                0
-            );
+            for (int col = 0; col < gridSize; col++)
+            {
+                // Lägg till alla positioner UTOM den tomma
+                if (!(row == gridSize - 1 && col == gridSize - 1))
+                {
+                    availablePositions.Add(new Vector2Int(col, row));
+                }
+            }
         }
 
-        // Sätt emptyIndex till hörnet
-        emptyIndex = 15;
+        // 2. BLANDA LISTAN
+        for (int i = 0; i < availablePositions.Count; i++)
+        {
+            int randomIndex = Random.Range(i, availablePositions.Count);
+            Vector2Int temp = availablePositions[i];
+            availablePositions[i] = availablePositions[randomIndex];
+            availablePositions[randomIndex] = temp;
+        }
+
+        // 3. PLACERA VARJE BRICKA PÅ EN UNIK POSITION
+        tileAtPosition.Clear();
+
+        for (int i = 0; i < tiles.Count; i++)
+        {
+            if (i < availablePositions.Count)
+            {
+                Vector2Int pos = availablePositions[i];
+                Vector3 worldPos = new Vector3(
+                    gridPositions[pos.y, pos.x].x,  // row = y, col = x
+                    gridPositions[pos.y, pos.x].y,
+                    0
+                );
+
+                tiles[i].transform.localPosition = worldPos;
+                tileAtPosition[pos] = tiles[i];
+
+                Debug.Log($"Placerade bricka {i + 1} på position ({pos.x}, {pos.y})");
+            }
+        }
+
+        // 4. DEN TOMMA POSITIONEN ÄR ALLTID NEDRE HÖGRA HÖRNET
+        emptyGridPos = new Vector2Int(gridSize - 1, gridSize - 1);
+
+        Debug.Log($"Shuffle klar! Tom position: ({emptyGridPos.x}, {emptyGridPos.y})");
+
+        // 5. GÖR NÅGRA ENKLA DRAG FÖR ATT VERKLIGEN BLANDA
+        MakeSomeRandomMoves();
+    }
+
+    void MakeSomeRandomMoves()
+    {
+        // Gör 20 slumpmässiga men giltiga drag
+        for (int i = 0; i < 20; i++)
+        {
+            List<GameObject> movableTiles = GetMovableTiles();
+            if (movableTiles.Count > 0)
+            {
+                GameObject randomTile = movableTiles[Random.Range(0, movableTiles.Count)];
+                MoveTile(randomTile);
+            }
+        }
     }
 
     void HandleTileClick()
     {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Debug.Log($"Mouse clicked at world position: {mousePos}"); // DEBUG
-
         RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
 
         if (hit.collider != null)
         {
-            Debug.Log($"Hit: {hit.collider.gameObject.name}"); // DEBUG
             GameObject clickedTile = hit.collider.gameObject;
 
-            // Visual feedback - flash the tile
-            StartCoroutine(FlashTile(clickedTile));
-
+            // Kolla om brickan kan flyttas
             if (CanTileMove(clickedTile))
             {
                 MoveTile(clickedTile);
@@ -217,95 +269,129 @@ public class SlidingPuzzle : MonoBehaviour
             }
             else
             {
-                Debug.Log("Tile cannot move (not adjacent to empty space)"); // DEBUG
+                Debug.Log("Brickan kan inte flyttas (inte bredvid tom position)");
             }
         }
-        else
-        {
-            Debug.Log("No collider hit! Check Box Collider 2D on tiles."); // DEBUG
-        }
     }
 
-    IEnumerator FlashTile(GameObject tile)
-    {
-        SpriteRenderer renderer = tile.GetComponent<SpriteRenderer>();
-        if (renderer != null)
-        {
-            Color original = renderer.color;
-            renderer.color = Color.white;
-            yield return new WaitForSeconds(0.1f);
-            renderer.color = original;
-        }
-    }
-
+    // KONTROLLERA OM EN BRICKA KAN FLYTTAS
     bool CanTileMove(GameObject tile)
     {
-        Vector3 tilePos = tile.transform.localPosition;
-        Vector3 emptyPos = GetEmptyPosition();
-        float distance = Vector3.Distance(tilePos, emptyPos);
+        // HITTA BRICKANS POSITION
+        Vector2Int tilePos = FindTilePosition(tile);
 
-        // ADJUSTED for bigger tiles: 3.5f * 1.2f ≈ 4.2f
-        float maxDistance = 3.5f * 1.2f;
-        return distance < maxDistance;
+        if (tilePos.x == -1)
+        {
+            Debug.Log("Kunde inte hitta brickans position");
+            return false;
+        }
+
+        // EN BRICKA KAN BARA FLYTTAS OM DEN ÄR BREDVID DEN TOMMA POSITIONEN
+        // Det betyder: samma rad och kolumn skillnad 1, ELLER samma kolumn och rad skillnad 1
+        bool canMove = (tilePos.x == emptyGridPos.x && Mathf.Abs(tilePos.y - emptyGridPos.y) == 1) ||
+                       (tilePos.y == emptyGridPos.y && Mathf.Abs(tilePos.x - emptyGridPos.x) == 1);
+
+        Debug.Log($"Bricka på ({tilePos.x},{tilePos.y}), tom på ({emptyGridPos.x},{emptyGridPos.y}) - Kan flyttas: {canMove}");
+        return canMove;
     }
 
+    // HITTA EN BRICKAS POSITION I VÅRT SYSTEM
+    Vector2Int FindTilePosition(GameObject tile)
+    {
+        foreach (var entry in tileAtPosition)
+        {
+            if (entry.Value == tile)
+            {
+                return entry.Key;
+            }
+        }
+        return new Vector2Int(-1, -1); // Hittades inte
+    }
+
+    // HÄMTA DEN TOMMA POSITIONENS VÄRLDSKOORDINATER
     Vector3 GetEmptyPosition()
     {
-        int emptyRow = emptyIndex / gridSize;
-        int emptyCol = emptyIndex % gridSize;
         return new Vector3(
-            gridPositions[emptyRow, emptyCol].x,
-            gridPositions[emptyRow, emptyCol].y,
+            gridPositions[emptyGridPos.y, emptyGridPos.x].x,
+            gridPositions[emptyGridPos.y, emptyGridPos.x].y,
             0
         );
     }
 
+    // FLYTTA EN BRICKA
     void MoveTile(GameObject tile)
     {
-        Vector3 emptyPos = GetEmptyPosition();
-        tile.transform.localPosition = emptyPos;
+        // HITTA BRICKANS NUvarande POSITION
+        Vector2Int tilePos = FindTilePosition(tile);
 
-        for (int i = 0; i < tiles.Count; i++)
+        if (tilePos.x == -1)
         {
-            if (tiles[i] == tile)
-            {
-                emptyIndex = i;
-                break;
-            }
+            Debug.LogError("Kunde inte hitta brickans position!");
+            return;
         }
 
-        // Play sound effect (you can add this later)
-        // AudioManager.PlaySound("slide");
+        // BERÄKNA VAR BRICKAN SKA FLYTTAS (till den tomma positionen)
+        Vector3 newWorldPos = GetEmptyPosition();
+
+        // FLYTTA BRICKAN VISUELLT
+        tile.transform.localPosition = newWorldPos;
+
+        // UPPDATERA VÅRT SYSTEM:
+        // 1. Ta bort brickan från dess gamla position
+        tileAtPosition.Remove(tilePos);
+
+        // 2. Lägg till brickan på den nya positionen (där den tomma var)
+        tileAtPosition[emptyGridPos] = tile;
+
+        // 3. Uppdatera emptyGridPos till där brickan KOM FRÅN
+        emptyGridPos = tilePos;
+
+        Debug.Log($"Flyttade bricka från ({tilePos.x},{tilePos.y}) till ({emptyGridPos.x},{emptyGridPos.y})");
     }
 
+    // HÄMTA ALLA BRICKOR SOM KAN FLYTTAS
     List<GameObject> GetMovableTiles()
     {
         List<GameObject> movable = new List<GameObject>();
-        Vector3 emptyPos = GetEmptyPosition();
 
-        foreach (GameObject tile in tiles)
+        // KONTROLLERA ALLA 4 POSITIONER BREDVID DEN TOMMA
+        Vector2Int[] directions = {
+            new Vector2Int(1, 0),   // Höger
+            new Vector2Int(-1, 0),  // Vänster
+            new Vector2Int(0, 1),   // Upp
+            new Vector2Int(0, -1)   // Ner
+        };
+
+        foreach (Vector2Int dir in directions)
         {
-            if (CanTileMove(tile))
+            Vector2Int checkPos = emptyGridPos + dir;
+
+            // KONTROLLERA OM POSITIONEN ÄR INOM GRIDET
+            if (checkPos.x >= 0 && checkPos.x < gridSize &&
+                checkPos.y >= 0 && checkPos.y < gridSize)
             {
-                movable.Add(tile);
+                // KONTROLLERA OM DET FINNS EN BRICKA PÅ DENNA POSITION
+                if (tileAtPosition.ContainsKey(checkPos))
+                {
+                    movable.Add(tileAtPosition[checkPos]);
+                }
             }
         }
+
         return movable;
     }
 
+    // KONTROLLERA OM PUZZLET ÄR LÖST
     bool IsPuzzleSolved()
     {
         foreach (GameObject tile in tiles)
         {
             TileInfo info = tile.GetComponent<TileInfo>();
-            Vector3 currentPos = tile.transform.localPosition;
-            Vector3 correctPos = new Vector3(
-                gridPositions[info.correctRow, info.correctCol].x,
-                gridPositions[info.correctRow, info.correctCol].y,
-                0
-            );
+            Vector2Int currentPos = FindTilePosition(tile);
 
-            if (Vector3.Distance(currentPos, correctPos) > 0.5f) // INCREASED tolerance
+            // En bricka är på rätt plats om:
+            // currentPos.x == info.correctCol OCH currentPos.y == info.correctRow
+            if (currentPos.x != info.correctCol || currentPos.y != info.correctRow)
             {
                 return false;
             }
@@ -319,12 +405,13 @@ public class SlidingPuzzle : MonoBehaviour
         int seconds = Mathf.FloorToInt(currentTime % 60);
         timerText.text = $"TIME: {minutes:00}:{seconds:00}";
 
-        if (currentTime <= 30f)
+        // BLINKA RÖD NÄR DET ÄR MINDRE ÄN 1 MINUT KVAR
+        if (currentTime <= 60f)
         {
             float flash = Mathf.Sin(Time.time * 10f) * 0.5f + 0.5f;
             timerText.color = Color.Lerp(Color.white, Color.red, flash);
         }
-        else if (currentTime <= 60f)
+        else if (currentTime <= 120f) // GUL VID 2 MINUTER KVAR
         {
             timerText.color = Color.yellow;
         }
