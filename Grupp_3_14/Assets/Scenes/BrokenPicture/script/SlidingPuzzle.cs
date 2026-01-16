@@ -170,16 +170,26 @@ public class SlidingPuzzle : MonoBehaviour
 
     void ShufflePuzzle()
     {
-        int shuffleCount = 100;
-        for (int i = 0; i < shuffleCount; i++)
+        // Flytta alla brickor slumpmässigt
+        for (int i = 0; i < 50; i++)
         {
-            List<GameObject> movableTiles = GetMovableTiles();
-            if (movableTiles.Count > 0)
-            {
-                GameObject randomTile = movableTiles[Random.Range(0, movableTiles.Count)];
-                MoveTile(randomTile);
-            }
+            // Välj en slumpmässig bricka
+            GameObject tile = tiles[Random.Range(0, tiles.Count)];
+
+            // Hitta en slumpmässig position i gridet
+            int randomRow = Random.Range(0, gridSize);
+            int randomCol = Random.Range(0, gridSize);
+
+            // Flytta brickan dit
+            tile.transform.localPosition = new Vector3(
+                gridPositions[randomRow, randomCol].x,
+                gridPositions[randomRow, randomCol].y,
+                0
+            );
         }
+
+        // Sätt emptyIndex till hörnet
+        emptyIndex = 15;
     }
 
     void HandleTileClick()
