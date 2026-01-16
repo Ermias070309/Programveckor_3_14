@@ -498,7 +498,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneToLoad: Minigame1
-  puzzleID: Puzzle_3
+  puzzleID: Puzzle_Simon
   returnID: 
   interactIcon: {fileID: 1139739731}
   fadeAnim: {fileID: 86382021}

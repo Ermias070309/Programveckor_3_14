@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Mainmenu : MonoBehaviour
+public class EndScene : MonoBehaviour
 {
-   
+
 
     public void PlayGame()
     {
@@ -13,9 +13,6 @@ public class Mainmenu : MonoBehaviour
             GameTimer.Instance.StartTimer();
         }
 
-
-        PlayerPrefs.DeleteAll();
-
-        SceneManager.LoadSceneAsync(1);
+        SceneManager.LoadSceneAsync(3);
     }
 }

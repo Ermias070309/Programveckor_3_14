@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -19,6 +19,7 @@ public class SimonSaysMinigame : MonoBehaviour
 
     bool passed = false;
     bool won = false;
+    bool puzzleLocked = false; // 🔒 NY
 
     Color32 red = new Color32(255, 39, 0, 255);
     Color32 green = new Color32(0, 255, 0, 255);
@@ -43,10 +44,12 @@ public class SimonSaysMinigame : MonoBehaviour
 
     void Start()
     {
-        // Om pusslet redan �r klart � visa inte panelen
+        // 🔒 Om puzzlet redan är klart → lås allt
         if (PlayerPrefs.GetInt(puzzleID + "_Completed", 0) == 1)
         {
+            puzzleLocked = true;
             simonSaysGamePanel.SetActive(false);
+            DisableInteractableButtons();
             return;
         }
 
@@ -62,6 +65,8 @@ public class SimonSaysMinigame : MonoBehaviour
 
     public void ButtonClickOrder(int button)
     {
+        if (puzzleLocked) return; // 🔒 extra skydd
+
         buttonsClicked++;
 
         if (button == lightOrder[buttonsClicked - 1])
@@ -116,23 +121,21 @@ public class SimonSaysMinigame : MonoBehaviour
         }
 
         ResetLights();
-        EnableInteractableButtons();
 
         if (isError)
         {
+            EnableInteractableButtons();
             ResetGame();
         }
         else if (won)
         {
-            // Markera pussel klart
+            // ✅ Markera pussel klart
             PlayerPrefs.SetInt(puzzleID + "_Completed", 1);
-
-            // S�tt spawnpunkt f�r �terkomst
             PlayerPrefs.SetString("SpawnID", returnSpawnID);
-
             PlayerPrefs.Save();
 
-            // Fade + scenbyte
+            puzzleLocked = true; // 🔒 lås för alltid
+
             StartCoroutine(LoadSceneAfterFade());
         }
     }
@@ -166,6 +169,8 @@ public class SimonSaysMinigame : MonoBehaviour
 
     void EnableInteractableButtons()
     {
+        if (puzzleLocked) return;
+
         foreach (var btn in buttons)
             btn.GetComponent<Button>().interactable = true;
     }
@@ -181,6 +186,8 @@ public class SimonSaysMinigame : MonoBehaviour
 
     void ResetGame()
     {
+        if (puzzleLocked) return;
+
         StopAllCoroutines();
 
         level = 1;
@@ -206,4 +213,5 @@ public class SimonSaysMinigame : MonoBehaviour
         SceneManager.LoadScene(sceneToLoad);
     }
 }
+
 
